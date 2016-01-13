@@ -356,6 +356,7 @@ message LayerParameter {
   optional AccuracyParameter accuracy_param = 102;
   optional ArgMaxParameter argmax_param = 103;
   optional BatchNormParameter batch_norm_param = 139;
+  optional BNParameter bn_param = 140;
   optional ConcatParameter concat_param = 104;
   optional ContrastiveLossParameter contrastive_loss_param = 105;
   optional ConvolutionParameter convolution_param = 106;
@@ -495,6 +496,15 @@ message BatchNormParameter {
   // Small value to add to the variance estimate so that we don't divide by
   // zero.
   optional float eps = 3 [default = 1e-5];
+}
+
+// Message that stores parameters used by BNLayer
+message BNParameter {
+  optional FillerParameter scale_filler = 1; // The filler for the scale
+  optional FillerParameter shift_filler = 2; // The filler for the shift
+  optional float var_eps = 3 [default = 1e-10]; // The epsilon added to variance
+  optional bool moving_average = 4 [default = true]; // whether or not using moving average for inference
+  optional float decay = 5 [default = 0.95]; // The decay factor for moving average
 }
 
 message ContrastiveLossParameter {
