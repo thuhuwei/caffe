@@ -12,10 +12,11 @@ def conv_layer(bottom, num_filter, param, weight_filler, bias_filler, kernel = 3
 def conv_bn_layers(bottom, num_filter, param, weight_filler, bias_filler, kernel = 3, stride=1, pad = 0):
 	conv = conv_layer(bottom, num_filter = num_filter, kernel = kernel, stride=stride, pad = pad,
 		param = param, weight_filler = weight_filler, bias_filler = bias_filler)
-	#bn = L.BatchNorm(conv, in_place=True, param = [{"lr_mult":0},{"lr_mult":0},{"lr_mult":0}])	#use_global_stats = False,
-	bn = L.BN(conv, param = [dict(lr_mult=1), dict(lr_mult=1)], scale_filler=dict(type="constant", value=1), shift_filler=dict(type="constant", value=0))
-	lrn = L.LRN(bn)
-	return lrn
+	bn = L.BatchNorm(conv, in_place=True, param = [])	#use_global_stats = False,
+	scale = L.Scale(bn, in_place=True, param = [{"bias_term":True}])
+	#bn = L.BN(conv, param = [dict(lr_mult=1), dict(lr_mult=1)], scale_filler=dict(type="constant", value=1), shift_filler=dict(type="constant", value=0))
+	#lrn = L.LRN(bn)
+	return scale
 
 def residual_standard_layers(bottom, param, weight_filler, bias_filler, num_filter):
 	conv1 = conv_bn_layers(bottom, num_filter = num_filter, kernel = 3, stride = 1, pad = 1,
