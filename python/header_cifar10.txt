@@ -1,0 +1,37 @@
+name: "CIFAR10_deep"
+layer {
+  name: "cifar"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  transform_param {
+    crop_size: 32
+    mirror: false
+  }
+  data_param {
+    source: "examples/cifar10/cifar10_pad_train_lmdb"
+    batch_size: 128
+    backend: LMDB
+  }
+}
+layer {
+  name: "cifar"
+  type: "Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  transform_param {
+    crop_size: 32
+    mirror: false
+  }
+  data_param {
+    source: "examples/cifar10/cifar10_pad_val_lmdb"
+    batch_size: 100
+    backend: LMDB
+  }
+}
